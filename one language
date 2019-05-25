@@ -1,0 +1,100 @@
+<?php
+/**
+ * WPML Find and Replace for one language
+ *
+ * This plugin improves upon the database search/replace functionality offered
+ * by some other plugins- offering serialization support, the ability to
+ * select specific language tables, and the ability to run replace.
+ *
+ * @since             1.0.0
+ *
+ * @wordpress-plugin
+ * Plugin Name:       WPML Find and Replace for one language
+ * Plugin URI:        https://standardtouch.com
+ * Description:       A small plugin for running a find/replace on your WordPress database for one language.
+ * Version:           1.0.0
+ * Author:            Shahala Anjum Choudhary
+ * Text Domain:       wpml-lang-find-replace
+ * Domain Path:       /languages
+ 
+*/
+
+    if ( ! defined( 'ABSPATH' ) ) {
+        exit; // Exit if accessed directly
+    }
+
+add_action( 'admin_menu', 'extra_post_info_menu' );
+
+function extra_post_info_menu(){
+
+  $page_title = 'WPML Find and Replace for one language';
+  $menu_title = 'WPML Find and Replace for one language';
+  $capability = 'manage_options';
+  $menu_slug  = 'WPML-Find-and-Replace-for-one-language';
+  $function   = 'extra_post_info_page';
+  $icon_url   = 'dashicons-media-code';
+  $position   = 4;
+
+  add_menu_page( $page_title,
+                 $menu_title, 
+                 $capability, 
+                 $menu_slug, 
+                 $function, 
+                 $icon_url, 
+                 $position );
+}
+
+if( !function_exists("extra_post_info_page") )
+{
+function extra_post_info_page(){
+?>
+  
+  
+  
+<div id="bsr-search-replace-wrap">
+
+	<div class="inside">
+
+		<p><?php _e( 'This tool allows you to Find and Replace text for one language in your database.', 'wpml-lang-find-replace' ); ?></p>
+		<p><?php _e( 'To get started, use the form below to enter the text to be replaced and select the tables to update.', 'wpml-lang-find-replace' ); ?></p>
+		<p><?php _e( '<strong>WARNING:</strong> Make sure you backup your database before using this plugin!', 'wpml-lang-find-replace' ); ?></p>
+
+		<table id="" class="form-table">
+
+			<tr>
+				<td><label for="search_for"><strong><?php _e( 'Search for', 'wpml-lang-find-replace' ); ?></strong></label></td>
+				<td><input id="search_for" class="regular-text" type="text" name="search_for" value="<?php BSR_Admin::prefill_value( 'search_for' ); ?>" /></td>
+			</tr>
+
+			<tr>
+				<td><label for="replace_with"><strong><?php _e( 'Replace with', 'wpml-lang-find-replace' ); ?></strong></label></td>
+				<td><input id="replace_with" class="regular-text" type="text" name="replace_with" value="<?php BSR_Admin::prefill_value( 'replace_with' ); ?>" /></td>
+			</tr>
+			
+			<tr>
+				<td><label for="select_tables"><strong><?php _e( 'Select tables', 'wpml-lang-find-replace' ); ?></strong></label></td>
+				<td>
+					<?php BSR_Admin::load_tables(); ?>
+					<p class="description"><?php _e( 'Select multiple tables with Ctrl-Click for Windows or Cmd-Click for Mac.', 'wpml-lang-find-replace' ); ?></p>
+				</td>
+			</tr>
+		</table>
+
+		<br>
+
+		<div >
+			<?php wp_nonce_field( 'process_search_replace', 'bsr_nonce' ); ?>
+			<input type="hidden" name="action" value="bsr_process_search_replace" />
+			<button id="" type="submit" class="button"><?php _e( 'Run WPML Find and Replace for one language', 'wpml-lang-find-replace' ); ?></button>
+		</div>
+
+	</div>
+
+</div>
+  
+  
+<?php
+}
+}
+?>
+
